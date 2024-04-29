@@ -12,6 +12,7 @@ struct DetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @State private var showingDeleteAlert = false
+    @State private var date = ""
     
     let book : Book
     
@@ -34,10 +35,13 @@ struct DetailView: View {
                 .font(.title)
                 .foregroundStyle(.secondary)
             
+            Text(book.date.formatted(date: .abbreviated, time: .omitted))
+            
             Text(book.review)
                 .padding()
             
             RatingView(rating: .constant(book.rating))
+                .font(.largeTitle)
         }
         .navigationTitle(book.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -65,7 +69,7 @@ struct DetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Book.self, configurations: config)
         
-        let example = Book(title: "Test Book", author: "Test Author", genre: "Fantasy", review: "This was a great book. I really enjoyed it.", rating: 4)
+        let example = Book(title: "Test Book", author: "Test Author", genre: "Fantasy", review: "This was a great book. I really enjoyed it.", rating: 4, date: Date.now)
         return DetailView(book: example)
             .modelContainer(container)
     }
